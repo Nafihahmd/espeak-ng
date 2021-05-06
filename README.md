@@ -66,20 +66,36 @@ Main aim of this fork is to shed light on two things:
 1. Setting-up cross compiling toolchain
 2. Removing unwanted languages (to save up space)
 
-## Cross-Compiling Tool Chain
+## Cross-Compiling for Embedded Linux
 Here I a have used a toolchain specific for Rpi. Follow [*this guide*](https://stackoverflow.com/questions/19162072/how-to-install-the-raspberry-pi-cross-compiler-on-my-linux-host-machine/58559140#58559140) to set-up the toolchain yourself.You could skip the "rsync" step as it is not necessary.\
-After setting-up tool chain follow below steps to compile espeak-ng.
+After setting-up tool chain follow below steps to compile espeak-ng:
+1. Clone this repository
+```
+git clone https://github.com/Nafihahmd/espeak-ng.git
+``` 
+2. Enter inside the repository
+```
+cd espeak-ng
+```
+3. Run Autogen script
+```
+./autogen.sh
+```
+4. Run configure with *CC Flag* pointing to our newly installed tool chain and build (make) the application
 ```
 CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
 
 make -B
 ```
-You sholud consider disabling unnecessary features during configure stage.
-eg.,\ `CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --prefix=/usr --without-klatt --with-speechplayer=no --with-mbrola=no --with-sonic=no --with-async=no --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr`
+	You sholud consider disabling unnecessary features during configure stage.
+eg.,
+ ```
+ CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --prefix=/usr --without-klatt --with-speechplayer=no --with-mbrola=no --with-sonic=no --with-async=no --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
+ ```
 
-```
-After making you can copy the compiled files to your destination device. Place the shared library files (found at src/.libs) to `/usr/lib` of destination device
-. 
+5. Copy files to your host device
+	After making you can copy the compiled files to your destination device. Place the shared library files (found at src/.libs) to `/usr/lib` of destination device. Also copy *espeak-ng-data* to specified location (either /usr/share or /usr/local/share).
+
 ## Documentation
 
 1. [User guide](docs/guide.md) explains how to set up and use eSpeak NG from command line or as a library.
