@@ -1,6 +1,6 @@
 # eSpeak NG for Embedded Linux
 
- [Features](#features)
+- [Features](#features)
 - [Supported languages](docs/languages.md)
 - [Documentation](#documentation)
 - [Cross Compiling](#cross-compile)
