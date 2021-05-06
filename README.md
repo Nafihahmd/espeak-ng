@@ -1,17 +1,17 @@
-# eSpeak NG Text-to-Speech
+# eSpeak NG for Embedded Linux
 
 - [Features](#features)
 - [Supported languages](docs/languages.md)
 - [Documentation](#documentation)
+- [Cross Compiling](#cross-compile)
+- [Removing languages](docs/rm-languages.md)
 - [eSpeak Compatibility](#espeak-compatibility)
 - [History](#history)
 - [License Information](#license-information)
 ----------
 
 The eSpeak NG is a compact open source software text-to-speech synthesizer for 
-Linux, Windows, Android and other operating systems. It supports 
-[more than 100 languages and accents](docs/languages.md). It is based on the eSpeak engine
-created by Jonathan Duddington.
+Linux, Windows, Android and other operating systems. It is based on the eSpeak engine created by Jonathan Duddington.
 
 eSpeak NG uses a "formant synthesis" method. This allows many languages to be
 provided in a small size. The speech is clear, and can be used at high speeds,
@@ -60,6 +60,26 @@ The following platforms are supported:
 | Windows     | Windows 8       |        |
 | Mac         |                 |        |
 
+## Cross-Compiling 
+This fork is dedicated for setting up espeak-ng for embedded Linux. Testing is done on Raspberry pi 3 B+ with 32 bit arm7l architecture. Since embedded system is resource constrained every unecessary feature is cutdown from the parent project.\
+Main aim of this fork is to shed light on two things:
+1. Setting-up cross compiling toolchain
+2. Removing unwanted languages (to save up space)
+
+## Cross-Compiling Tool Chain
+Here I a have used a toolchain specific for Rpi. Follow [*this guide*](https://stackoverflow.com/questions/19162072/how-to-install-the-raspberry-pi-cross-compiler-on-my-linux-host-machine/58559140#58559140) to set-up the toolchain yourself.You could skip the "rsync" step as it is not necessary.\
+After setting-up tool chain follow below steps to compile espeak-ng.
+```
+CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
+
+make -B
+```
+You sholud consider disabling unnecessary features during configure stage.
+eg.,\ `CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --prefix=/usr --without-klatt --with-speechplayer=no --with-mbrola=no --with-sonic=no --with-async=no --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr`
+
+```
+After making you can copy the compiled files to your destination device. Place the shared library files (found at src/.libs) to `/usr/lib` of destination device
+. 
 ## Documentation
 
 1. [User guide](docs/guide.md) explains how to set up and use eSpeak NG from command line or as a library.
