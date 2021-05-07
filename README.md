@@ -35,7 +35,7 @@ eSpeak NG is available as:
 *  Includes different Voices, whose characteristics can be altered.
 *  Can produce speech output as a WAV file.
 *  ~~SSML (Speech Synthesis Markup Language) is supported (not complete),
-   and also HTML~~. (Feature Removed)
+   and also HTML~~. Removed Feature
 *  Compact size.  The program and its data, including many languages,
    totals about few Mbytes.
 *  Can be used as a front-end to [MBROLA diphone voices](docs/mbrola.md).
