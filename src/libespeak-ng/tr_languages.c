@@ -34,59 +34,59 @@
 #include "translate.h"           // for Translator, LANGUAGE_OPTIONS, L, NUM...
 
 // start of unicode pages for character sets
-#define OFFSET_GREEK    0x380
-#define OFFSET_CYRILLIC 0x420
-#define OFFSET_ARMENIAN 0x530
-#define OFFSET_HEBREW   0x590
-#define OFFSET_ARABIC   0x600
-#define OFFSET_SYRIAC   0x700
-#define OFFSET_DEVANAGARI  0x900
-#define OFFSET_BENGALI  0x980
-#define OFFSET_GURMUKHI 0xa00
-#define OFFSET_GUJARATI 0xa80
-#define OFFSET_ORIYA    0xb00
+// #define OFFSET_GREEK    0x380
+// #define OFFSET_CYRILLIC 0x420
+// #define OFFSET_ARMENIAN 0x530
+// #define OFFSET_HEBREW   0x590
+// #define OFFSET_ARABIC   0x600
+// #define OFFSET_SYRIAC   0x700
+// #define OFFSET_DEVANAGARI  0x900
+// #define OFFSET_BENGALI  0x980
+// #define OFFSET_GURMUKHI 0xa00
+// #define OFFSET_GUJARATI 0xa80
+// #define OFFSET_ORIYA    0xb00
 #define OFFSET_TAMIL    0xb80
 #define OFFSET_TELUGU   0xc00
 #define OFFSET_KANNADA  0xc80
 #define OFFSET_MALAYALAM 0xd00
-#define OFFSET_SINHALA  0x0d80
-#define OFFSET_THAI     0x0e00
-#define OFFSET_LAO      0x0e80
-#define OFFSET_TIBET    0x0f00
-#define OFFSET_MYANMAR  0x1000
-#define OFFSET_GEORGIAN 0x10a0
-#define OFFSET_KOREAN   0x1100
-#define OFFSET_ETHIOPIC 0x1200
+// #define OFFSET_SINHALA  0x0d80
+// #define OFFSET_THAI     0x0e00
+// #define OFFSET_LAO      0x0e80
+// #define OFFSET_TIBET    0x0f00
+// #define OFFSET_MYANMAR  0x1000
+// #define OFFSET_GEORGIAN 0x10a0
+// #define OFFSET_KOREAN   0x1100
+// #define OFFSET_ETHIOPIC 0x1200
 
 // character ranges must be listed in ascending unicode order
 ALPHABET alphabets[] = {
-	{ "_el",    OFFSET_GREEK,    0x380, 0x3ff,  L('e', 'l'), AL_DONT_NAME | AL_NOT_LETTERS | AL_WORDS },
-	{ "_cyr",   OFFSET_CYRILLIC, 0x400, 0x52f,  0, 0 },
-	{ "_hy",    OFFSET_ARMENIAN, 0x530, 0x58f,  L('h', 'y'), AL_WORDS },
-	{ "_he",    OFFSET_HEBREW,   0x590, 0x5ff,  0, 0 },
-	{ "_ar",    OFFSET_ARABIC,   0x600, 0x6ff,  0, 0 },
-	{ "_syc",   OFFSET_SYRIAC,   0x700, 0x74f,  0, 0 },
-	{ "_hi",    OFFSET_DEVANAGARI, 0x900, 0x97f, L('h', 'i'), AL_WORDS },
-	{ "_bn",    OFFSET_BENGALI,  0x0980, 0x9ff, L('b', 'n'), AL_WORDS },
-	{ "_gur",   OFFSET_GURMUKHI, 0xa00, 0xa7f,  L('p', 'a'), AL_WORDS },
-	{ "_gu",    OFFSET_GUJARATI, 0xa80, 0xaff,  L('g', 'u'), AL_WORDS },
-	{ "_or",    OFFSET_ORIYA,    0xb00, 0xb7f,  0, 0 },
+// 	{ "_el",    OFFSET_GREEK,    0x380, 0x3ff,  L('e', 'l'), AL_DONT_NAME | AL_NOT_LETTERS | AL_WORDS },
+// 	{ "_cyr",   OFFSET_CYRILLIC, 0x400, 0x52f,  0, 0 },
+// 	{ "_hy",    OFFSET_ARMENIAN, 0x530, 0x58f,  L('h', 'y'), AL_WORDS },
+// 	{ "_he",    OFFSET_HEBREW,   0x590, 0x5ff,  0, 0 },
+// 	{ "_ar",    OFFSET_ARABIC,   0x600, 0x6ff,  0, 0 },
+// 	{ "_syc",   OFFSET_SYRIAC,   0x700, 0x74f,  0, 0 },
+// 	{ "_hi",    OFFSET_DEVANAGARI, 0x900, 0x97f, L('h', 'i'), AL_WORDS },
+// 	{ "_bn",    OFFSET_BENGALI,  0x0980, 0x9ff, L('b', 'n'), AL_WORDS },
+// 	{ "_gur",   OFFSET_GURMUKHI, 0xa00, 0xa7f,  L('p', 'a'), AL_WORDS },
+// 	{ "_gu",    OFFSET_GUJARATI, 0xa80, 0xaff,  L('g', 'u'), AL_WORDS },
+// 	{ "_or",    OFFSET_ORIYA,    0xb00, 0xb7f,  0, 0 },
 	{ "_ta",    OFFSET_TAMIL,    0xb80, 0xbff,  L('t', 'a'), AL_WORDS },
 	{ "_te",    OFFSET_TELUGU,   0xc00, 0xc7f,  L('t', 'e'), 0 },
 	{ "_kn",    OFFSET_KANNADA,  0xc80, 0xcff,  L('k', 'n'), AL_WORDS },
 	{ "_ml",    OFFSET_MALAYALAM, 0xd00, 0xd7f,  L('m', 'l'), AL_WORDS },
-	{ "_si",    OFFSET_SINHALA,  0xd80, 0xdff,  L('s', 'i'), AL_WORDS },
-	{ "_th",    OFFSET_THAI,     0xe00, 0xe7f,  0, 0 },
-	{ "_lo",    OFFSET_LAO,      0xe80, 0xeff,  0, 0 },
-	{ "_ti",    OFFSET_TIBET,    0xf00, 0xfff,  0, 0 },
-	{ "_my",    OFFSET_MYANMAR,  0x1000, 0x109f, 0, 0 },
-	{ "_ka",    OFFSET_GEORGIAN, 0x10a0, 0x10ff, L('k', 'a'), AL_WORDS },
-	{ "_ko",    OFFSET_KOREAN,   0x1100, 0x11ff, L('k', 'o'), AL_WORDS },
-	{ "_eth",   OFFSET_ETHIOPIC, 0x1200, 0x139f, 0, 0 },
-	{ "_braille", 0x2800,        0x2800, 0x28ff, 0, AL_NO_SYMBOL },
-	{ "_ja",    0x3040,          0x3040, 0x30ff, 0, AL_NOT_CODE },
-	{ "_zh",    0x3100,          0x3100, 0x9fff, 0, AL_NOT_CODE },
-	{ "_ko",    0xa700,          0xa700, 0xd7ff, L('k', 'o'), AL_NOT_CODE | AL_WORDS },
+// 	{ "_si",    OFFSET_SINHALA,  0xd80, 0xdff,  L('s', 'i'), AL_WORDS },
+// 	{ "_th",    OFFSET_THAI,     0xe00, 0xe7f,  0, 0 },
+// 	{ "_lo",    OFFSET_LAO,      0xe80, 0xeff,  0, 0 },
+// 	{ "_ti",    OFFSET_TIBET,    0xf00, 0xfff,  0, 0 },
+// 	{ "_my",    OFFSET_MYANMAR,  0x1000, 0x109f, 0, 0 },
+// 	{ "_ka",    OFFSET_GEORGIAN, 0x10a0, 0x10ff, L('k', 'a'), AL_WORDS },
+// 	{ "_ko",    OFFSET_KOREAN,   0x1100, 0x11ff, L('k', 'o'), AL_WORDS },
+// 	{ "_eth",   OFFSET_ETHIOPIC, 0x1200, 0x139f, 0, 0 },
+// 	{ "_braille", 0x2800,        0x2800, 0x28ff, 0, AL_NO_SYMBOL },
+// 	{ "_ja",    0x3040,          0x3040, 0x30ff, 0, AL_NOT_CODE },
+// 	{ "_zh",    0x3100,          0x3100, 0x9fff, 0, AL_NOT_CODE },
+// 	{ "_ko",    0xa700,          0xa700, 0xd7ff, L('k', 'o'), AL_NOT_CODE | AL_WORDS },
 	{ NULL, 0, 0, 0, 0, 0 }
 };
 
@@ -370,6 +370,7 @@ static const unsigned char ru_consonants[] = { // б в г д ж з й к л м 
 	0x11, 0x12, 0x13, 0x14, 0x16, 0x17, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1f, 0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2c, 0x73, 0x7b, 0x83, 0x9b, 0
 };
 
+/*
 static void SetArabicLetters(Translator *tr)
 {
 	const char *arab_vowel_letters = "َ  ُ  ِ";
@@ -416,7 +417,7 @@ static void SetCyrillicLetters(Translator *tr)
 	SetLetterBits(tr, LETTERGP_Y, cyrl_ivowels);
 	SetLetterBits(tr, LETTERGP_VOWEL2, (char *)ru_vowels);
 }
-
+*/
 static void SetIndicLetters(Translator *tr)
 {
 	// Set letter types for Devanagari (Indic) script languages: Devanagari, Tamill, etc.
@@ -442,6 +443,7 @@ static void SetIndicLetters(Translator *tr)
 	tr->langopts.param[LOPT_UNPRONOUNCABLE] = 1;    // disable check for unpronouncable words
 	tr->langopts.suffix_add_e = tr->letter_bits_offset + 0x4d; // virama
 }
+
 
 static void SetupTranslator(Translator *tr, const short *lengths, const unsigned char *amps)
 {
@@ -505,6 +507,7 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.accents = 1;
 	}
 		break;
+	/*
 	case L('a', 'm'): // Amharic, Ethiopia
 	{
 		SetupTranslator(tr, stress_lengths_fr, stress_amps_fr);
@@ -618,7 +621,7 @@ Translator *SelectTranslator(const char *name)
 		SetLetterVowel(tr, 'y');
 		tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_SWAP_TENS | NUM_HUNDRED_AND | NUM_OMIT_1_HUNDRED | NUM_ORDINAL_DOT | NUM_1900 | NUM_ROMAN | NUM_ROMAN_CAPITALS | NUM_ROMAN_ORDINAL;
 	}
-		break;
+		break; */
 	case L('d', 'e'):
 	{
 		static const short stress_lengths_de[8] = { 150, 130, 200, 200,  0, 0, 270, 270 };
@@ -651,6 +654,7 @@ Translator *SelectTranslator(const char *name)
 		SetLetterBits(tr, 6, "aeiouy"); // Group Y: vowels, including y
 	}
 		break;
+		/*
 	case L('e', 'l'): // Greek
 	case L3('g', 'r', 'c'): // Ancient Greek
 	{
@@ -693,6 +697,7 @@ Translator *SelectTranslator(const char *name)
 		}
 	}
 		break;
+		*/
 	case L('e', 'o'):
 	{
 		static const short stress_lengths_eo[8] = { 150, 140,  180, 180,    0,   0,  200, 200 };
@@ -712,6 +717,7 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_OMIT_1_HUNDRED | NUM_ALLOW_SPACE | NUM_ROMAN;
 	}
 		break;
+		/*
 	case L('e', 's'): // Spanish
 	case L('a', 'n'): // Aragonese
 	case L('c', 'a'): // Catalan
@@ -1159,6 +1165,7 @@ Translator *SelectTranslator(const char *name)
 	case L('k', 'y'): // Kyrgyx
 		tr->langopts.numbers = NUM_DEFAULT;
 		break;
+		*/
 	case L('l', 'a'): // Latin
 	{
 		tr->encoding = ESPEAKNG_ENCODING_ISO_8859_4; // includes a,e,i,o,u-macron
@@ -1171,6 +1178,7 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.max_roman = 5000;
 	}
 		break;
+		/*
 	case L('l', 't'): // Lithuanian
 	{
 		tr->encoding = ESPEAKNG_ENCODING_ISO_8859_4;
@@ -1464,6 +1472,7 @@ Translator *SelectTranslator(const char *name)
 		tr->langopts.numbers = NUM_AND_UNITS | NUM_HUNDRED_AND | NUM_SINGLE_AND | NUM_OMIT_1_HUNDRED;
 	}
 		break;
+		*/
 	case L('t', 'a'): // Tamil
 	case L('k', 'n'): // Kannada
 	case L('m', 'l'): // Malayalam
@@ -1502,6 +1511,7 @@ Translator *SelectTranslator(const char *name)
 		SetLetterBitsRange(tr, LETTERGP_B, 0x4e, 0x4e); // chillu-virama (unofficial)
 	}
 		break;
+		/*
 	case L('t', 'r'): // Turkish
 	case L('a', 'z'): // Azerbaijan
 	{
@@ -1578,6 +1588,7 @@ Translator *SelectTranslator(const char *name)
 
 	}
 		break;
+		*/
 	case L('w', 'o'):
 		tr->langopts.stress_rule = STRESSPOSN_1L;
 		tr->langopts.numbers = NUM_AND_UNITS | NUM_HUNDRED_AND | NUM_OMIT_1_HUNDRED | NUM_OMIT_1_THOUSAND | NUM_SINGLE_STRESS;
