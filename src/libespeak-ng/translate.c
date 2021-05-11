@@ -208,7 +208,7 @@ int IsAlpha(unsigned int c)
 
 		return 0;
 	}
-
+/*
 	if ((c >= 0x5b0) && (c <= 0x5c2))
 		return 1; // Hebrew vowel marks
 
@@ -217,10 +217,10 @@ int IsAlpha(unsigned int c)
 
 	if ((c == 0x670) || ((c >= 0x64b) && (c <= 0x65e)))
 		return 1; // arabic vowel marks
-
+*/
 	if ((c >= 0x300) && (c <= 0x36f))
 		return 1; // combining accents
-
+/*
 	if ((c >= 0xf40) && (c <= 0xfbc))
 		return 1; // tibetan
 
@@ -232,7 +232,7 @@ int IsAlpha(unsigned int c)
 
 	if ((c > 0x3040) && (c <= 0xa700))
 		return 1; // Chinese/Japanese.  Should never get here, but Mac OS 10.4's iswalpha seems to be broken, so just make sure
-
+*/
 	return 0;
 }
 
