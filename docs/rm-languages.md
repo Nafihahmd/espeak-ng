@@ -3,8 +3,8 @@ Espeak-ng supports 100+ languages. But incase you are not a multilingual and is 
 
 ## Objectives
 Language contaons two parts. Language data and language script. So the objectives are:
-- Support Language data 
-- Support script support
+- Remove Language data 
+- Remove script support
   
 ## Procedure
 ## Remove Language Data
@@ -49,22 +49,22 @@ Script support should be removed from **`src/libespeak-ng/tr_languages.c`**. Go 
 
 All Languages*
 
-|file                      | size (bytes) |
----------------------  |  ----------------
-|libespeak-ng.a   |2,584,008     |
-|libespeak-ng.so |1,557,248      |
+|file                      | size (bytes) | size after stripping** |
+---------------------  |  ----------------  ----------------------------
+|libespeak-ng.a   |2,584,008     |454,842  |
+|libespeak-ng.so |1,557,248      | 498,486 |
 
 
 English Only
 
-|file                      | size (bytes) |
----------------------  |  ----------------
-|libespeak-ng.a   |2,420,760     |
-|libespeak-ng.so |1,448,576      |
+|file                      | size (bytes) | size after stripping |
+---------------------  |  ----------------  ----------------------------
+|libespeak-ng.a   |2,420,760     | 440,866 |
+|libespeak-ng.so |1,448,576      | 481,016 |
 
 English + South Indian Languages
 
-|file                      | size (bytes) |
----------------------  |  ----------------
-|libespeak-ng.a   |2,427,696     |
-|libespeak-ng.so |1,456,096      |
+|file                      | size (bytes) | size after stripping |
+---------------------  |  ----------------  ----------------------------
+|libespeak-ng.a   |2,427,696     | 441,954 |
+|libespeak-ng.so |1,456,096      | 485,240 |
