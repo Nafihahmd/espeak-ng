@@ -50,7 +50,7 @@ Script support should be removed from **`src/libespeak-ng/tr_languages.c`**. Go 
 All Languages*
 
 |file                      | size (bytes) | size after stripping** |
----------------------  |  ----------------  -----------------------
+---------------------  |  ---------------- | -----------------------
 |libespeak-ng.a   |2,584,008     |454,842  |
 |libespeak-ng.so |1,557,248      | 498,486 |
 
@@ -58,13 +58,18 @@ All Languages*
 English Only
 
 |file                      | size (bytes) | size after stripping |
----------------------  |  ----------------  ---------------------
+---------------------  |  ---------------- | ---------------------
 |libespeak-ng.a   |2,420,760     | 440,866 |
 |libespeak-ng.so |1,448,576      | 481,016 |
 
 English + South Indian Languages
 
 |file                      | size (bytes) | size after stripping |
----------------------  |  ----------------  ---------------------
+---------------------  |  ---------------- | ----------------------------
 |libespeak-ng.a   |2,427,696     | 441,954 |
 |libespeak-ng.so |1,456,096      | 485,240 |
+
+
+\* All languages describe size after the removal of SSML feature
+/*/* Strip means remove debug information from a library. It is done using **Strip** command.  
+eg., `strip libespeak-ng.a`
