@@ -7,7 +7,7 @@ Language contaons two parts. Language data and language script. So the objective
 - Remove script support
   
 ## Procedure
-## Remove Language Data
+## 1. Remove Language Data
 Very simple procedure. Espeak-ng stores language data by default in the directory `/usr/share/local/espeak-ng-data`. If it is not present there try `/usr/share/espeak-ng-data`.
 1. Goto the folder
 ```
@@ -41,7 +41,7 @@ Remove unwanted languages using **rm** command.
 `sudo rm af_dict`  
 The above command will remove african support. Similarly remove every unwanted file.
 
-## Remove Script Support
+## 2. Remove Script Support
 Script support should be removed from **`src/libespeak-ng/tr_languages.c`**. Go throught the code and comment all unwanted language code.  
 **tr_languages.c** file in this repository is modifeid in such a way that it only support English (Latin script) and south Indic (Malayalam, Tamil, Telugu etc) scripts.
 
@@ -65,11 +65,11 @@ English Only
 English + South Indian Languages
 
 |file                      | size (bytes) | size after stripping |
----------------------  |  ---------------- | ----------------------------
+---------------------  |  ---------------- | --------------------
 |libespeak-ng.a   |2,427,696     | 441,954 |
 |libespeak-ng.so |1,456,096      | 485,240 |
 
 
-\* All languages describe size after the removal of SSML feature
-/*/* Strip means remove debug information from a library. It is done using **Strip** command.  
+\* All languages describe size after the removal of SSML feature  
+\*\* Strip means remove debug information from a library. It is done using **Strip** command.  
 eg., `strip libespeak-ng.a`
