@@ -15,4 +15,4 @@ git clone -b rm-compile-data --single-branch https://github.com/Nafihahmd/espeak
 cd espeak-ng
 unzip espeak-ng-data.zip
 ```
-That's it, you are done. Now follow the normal build process defined [here](docs/building.md).
+That's it, you are done. Now follow the normal build process defined [here](building.md).
