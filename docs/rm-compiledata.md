@@ -15,4 +15,21 @@ git clone -b rm-compile-data --single-branch https://github.com/Nafihahmd/espeak
 cd espeak-ng
 unzip espeak-ng-data.zip
 ```
-That's it, you are done. Now follow the normal build process defined [here](building.md).
+That's it, you are done. Now follow the normal build process defined [here](building.md).  
+
+## Result
+
+**Before**:
+
+|file                      | size (bytes) | size after stripping** |
+---------------------  |  ---------------- | -----------------------
+|libespeak-ng.a   |2,584,008     |454,842  |
+|libespeak-ng.so |1,557,248      | 498,486 |
+
+**After**:
+
+|file                      | size (bytes) | size after stripping** |
+---------------------  |  ---------------- | -----------------------
+|libespeak-ng.a   |2,107,022     |392,106  |
+|libespeak-ng.so |1,264,176      | 427,736 |
+
