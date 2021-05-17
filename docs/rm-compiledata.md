@@ -15,7 +15,7 @@ git clone -b rm-compile-data --single-branch https://github.com/Nafihahmd/espeak
 cd espeak-ng
 unzip espeak-ng-data.zip
 ```
-That's it, you are done. Now follow the normal build process defined [here](building.md).  
+That's it, you are done. Now follow the normal build process defined [here](building.md). If you are trying to cross compile espeak-ng for ARM architecture [start here](https://github.com/Nafihahmd/espeak-ng#cross-compiling).
 
 ## Result
 
