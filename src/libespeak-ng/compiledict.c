@@ -60,6 +60,8 @@ static int error_need_dictionary = 0;
 //         uint8_t length;
 //         char contents[length];
 //     };
+
+/*
 static char *hash_chains[N_HASH_DICT];
 
 static char letterGroupsDefined[N_LETTER_GROUPS];
@@ -171,195 +173,20 @@ typedef struct {
 	unsigned int length;
 	int group3_ix;
 } RGROUP;
-
+*/
 void print_dictionary_flags(unsigned int *flags, char *buf, int buf_len)
 {
-	int stress;
-	int ix;
-	const char *name;
-	int len;
-	int total = 0;
-
-	buf[0] = 0;
-	if ((stress = flags[0] & 0xf) != 0) {
-		sprintf(buf, "%s", LookupMnemName(mnem_flags, stress + 0x40));
-		total = strlen(buf);
-		buf += total;
-	}
-
-	for (ix = 8; ix < 64; ix++) {
-		if (((ix < 30) && (flags[0] & (1 << ix))) || ((ix >= 0x20) && (flags[1] & (1 << (ix-0x20))))) {
-			name = LookupMnemName(mnem_flags, ix);
-			len = strlen(name) + 1;
-			total += len;
-			if (total >= buf_len)
-				continue;
-			sprintf(buf, " %s", name);
-			buf += len;
-		}
-	}
+	
 }
 
 char *DecodeRule(const char *group_chars, int group_length, char *rule, int control)
 {
 	// Convert compiled match template to ascii
 
-	unsigned char rb;
-	unsigned char c;
-	char *p;
-	char *p_end;
-	int ix;
-	int match_type;
-	bool finished = false;
-	int value;
-	int linenum = 0;
-	int flags;
-	int suffix_char;
-	int condition_num = 0;
-	bool at_start = false;
-	const char *name;
-	char buf[200];
-	char buf_pre[200];
-	char suffix[20];
-	static char output[80];
-
-	static char symbols[] = {
-		' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-		'&', '%', '+', '#', 'S', 'D', 'Z', 'A', 'L', '!',
-		' ', '@', '?', 'J', 'N', 'K', 'V', '?', 'T', 'X',
-		'?', 'W'
-	};
-
-	static char symbols_lg[] = { 'A', 'B', 'C', 'H', 'F', 'G', 'Y' };
-
-	match_type = 0;
-	buf_pre[0] = 0;
-
-	for (ix = 0; ix < group_length; ix++)
-		buf[ix] = group_chars[ix];
-	buf[ix] = 0;
-
-	p = &buf[strlen(buf)];
-	while (!finished) {
-		rb = *rule++;
-
-		if (rb <= RULE_LINENUM) {
-			switch (rb)
-			{
-			case 0:
-			case RULE_PHONEMES:
-				finished = true;
-				break;
-			case RULE_PRE_ATSTART:
-				at_start = true;
-				// fallthrough:
-			case RULE_PRE:
-				match_type = RULE_PRE;
-				*p = 0;
-				p = buf_pre;
-				break;
-			case RULE_POST:
-				match_type = RULE_POST;
-				*p = 0;
-				strcat(buf, " (");
-				p = &buf[strlen(buf)];
-				break;
-			case RULE_PH_COMMON:
-				break;
-			case RULE_CONDITION:
-				// conditional rule, next byte gives condition number
-				condition_num = *rule++;
-				break;
-			case RULE_LINENUM:
-				value = (rule[1] & 0xff) - 1;
-				linenum = (rule[0] & 0xff) - 1 + (value * 255);
-				rule += 2;
-				break;
-			}
-			continue;
-		}
-
-		if (rb == RULE_DOLLAR) {
-			value = *rule++ & 0xff;
-			if ((value != 0x01) || (control & FLAG_UNPRON_TEST)) {
-				// TODO write the string backwards if in RULE_PRE
-				p[0] = '$';
-				name = LookupMnemName(mnem_rules, value);
-				strcpy(&p[1], name);
-				p += (strlen(name)+1);
-			}
-			c = ' ';
-		} else if (rb == RULE_ENDING) {
-			static const char *flag_chars = "eipvdfq tba ";
-			flags = ((rule[0] & 0x7f)<< 8) + (rule[1] & 0x7f);
-			suffix_char = 'S';
-			if (flags & (SUFX_P >> 8))
-				suffix_char = 'P';
-			sprintf(suffix, "%c%d", suffix_char, rule[2] & 0x7f);
-			rule += 3;
-			for (ix = 0; ix < 9; ix++) {
-				if (flags & 1)
-					sprintf(&suffix[strlen(suffix)], "%c", flag_chars[ix]);
-				flags = (flags >> 1);
-			}
-			strcpy(p, suffix);
-			p += strlen(suffix);
-			c = ' ';
-		} else if (rb == RULE_LETTERGP)
-			c = symbols_lg[*rule++ - 'A'];
-		else if (rb == RULE_LETTERGP2) {
-			value = *rule++ - 'A';
-			if (value < 0)
-				value += 256;
-			p[0] = 'L';
-			p[1] = (value / 10) + '0';
-			c = (value % 10) + '0';
-
-			if (match_type == RULE_PRE) {
-				p[0] = c;
-				c = 'L';
-			}
-			p += 2;
-		} else if (rb <= RULE_LAST_RULE)
-			c = symbols[rb];
-		else if (rb == RULE_SPACE)
-			c = '_';
-		else
-			c = rb;
-		*p++ = c;
-	}
-	*p = 0;
-
-	p = output;
-	p_end = p + sizeof(output) - 1;
-
-	if (linenum > 0) {
-		sprintf(p, "%5d:\t", linenum);
-		p += 7;
-	}
-	if (condition_num > 0) {
-		sprintf(p, "?%d ", condition_num);
-		p = &p[strlen(p)];
-	}
-	if (((ix = strlen(buf_pre)) > 0) || at_start) {
-		if (at_start)
-			*p++ = '_';
-		while ((--ix >= 0) && (p < p_end-3))
-			*p++ = buf_pre[ix];
-		*p++ = ')';
-		*p++ = ' ';
-	}
-	*p = 0;
-
-	buf[p_end - p] = 0; // prevent overflow in output[]
-	strcat(p, buf);
-	ix = strlen(output);
-	while (ix < 8)
-		output[ix++] = ' ';
-	output[ix] = 0;
-	return output;
+	
+	return 0;
 }
-
+/*
 typedef enum
 {
 	LINE_PARSER_WORD = 0,
@@ -1511,91 +1338,10 @@ static espeak_ng_STATUS compile_dictrules(FILE *f_in, FILE *f_out, char *fname_t
 	free_rules(rules, n_rules);
 	return ENS_OK;
 }
-
+*/
 #pragma GCC visibility push(default)
 ESPEAK_NG_API espeak_ng_STATUS espeak_ng_CompileDictionary(const char *dsource, const char *dict_name, FILE *log, int flags, espeak_ng_ERROR_CONTEXT *context)
 {
-	if (!log) log = stderr;
-	if (!dict_name) dict_name = dictionary_name;
-
-	// fname:  space to write the filename in case of error
-	// flags: bit 0:  include source line number information, for debug purposes.
-
-	FILE *f_in;
-	FILE *f_out;
-	int offset_rules = 0;
-	int value;
-	char fname_in[sizeof(path_home)+45];
-	char fname_out[sizeof(path_home)+15];
-	char fname_temp[sizeof(path_home)+15];
-	char path[sizeof(path_home)+40];       // path_dsource+20
-
-	error_count = 0;
-	error_need_dictionary = 0;
-	memset(letterGroupsDefined, 0, sizeof(letterGroupsDefined));
-
-	debug_flag = flags & 1;
-
-	if (dsource == NULL)
-		dsource = "";
-
-	f_log = log;
-	if (f_log == NULL)
-		f_log = stderr;
-
-	// try with and without '.txt' extension
-	sprintf(path, "%s%s_", dsource, dict_name);
-	sprintf(fname_in, "%srules.txt", path);
-	if ((f_in = fopen(fname_in, "r")) == NULL) {
-		sprintf(fname_in, "%srules", path);
-		if ((f_in = fopen(fname_in, "r")) == NULL)
-			return create_file_error_context(context, errno, fname_in);
-	}
-
-	sprintf(fname_out, "%s%c%s_dict", path_home, PATHSEP, dict_name);
-	if ((f_out = fopen(fname_out, "wb+")) == NULL) {
-		int error = errno;
-		fclose(f_in);
-		return create_file_error_context(context, error, fname_out);
-	}
-	sprintf(fname_temp, "%s%ctemp", path_home, PATHSEP);
-
-	value = N_HASH_DICT;
-	Write4Bytes(f_out, value);
-	Write4Bytes(f_out, offset_rules);
-
-	compile_dictlist_start();
-
-	fprintf(f_log, "Using phonemetable: '%s'\n", phoneme_tab_list[phoneme_tab_number].name);
-	compile_dictlist_file(path, "roots");
-	if (translator->langopts.listx) {
-		compile_dictlist_file(path, "list");
-		compile_dictlist_file(path, "listx");
-	} else {
-		compile_dictlist_file(path, "listx");
-		compile_dictlist_file(path, "list");
-	}
-	compile_dictlist_file(path, "emoji");
-	compile_dictlist_file(path, "extra");
-
-	compile_dictlist_end(f_out);
-	offset_rules = ftell(f_out);
-
-	fprintf(f_log, "Compiling: '%s'\n", fname_in);
-
-	espeak_ng_STATUS status = compile_dictrules(f_in, f_out, fname_temp, context);
-	fclose(f_in);
-
-	fseek(f_out, 4, SEEK_SET);
-	Write4Bytes(f_out, offset_rules);
-	fclose(f_out);
-	fflush(f_log);
-
-	if (status != ENS_OK)
-		return status;
-
-	LoadDictionary(translator, dict_name, 0);
-
-	return error_count > 0 ? ENS_COMPILE_ERROR : ENS_OK;
+	return 0;
 }
 #pragma GCC visibility pop

@@ -47,7 +47,7 @@
 #include "translate.h"                // for utf8_out, utf8_in
 #include "voice.h"                    // for LoadVoice, voice
 #include "wavegen.h"                  // for WavegenInit, WavegenSetVoice
-
+/*
 #define N_ITEM_STRING 256
 
 typedef struct {
@@ -332,63 +332,64 @@ unsigned short *prog_out;
 unsigned short *prog_out_max;
 unsigned short prog_buf[MAX_PROG_BUF+20];
 
-static espeak_ng_STATUS ReadPhondataManifest(espeak_ng_ERROR_CONTEXT *context)
-{
-	// Read the phondata-manifest file
-	FILE *f;
-	int n_lines = 0;
-	int ix;
-	char *p;
-	unsigned int value;
-	char buf[sizeof(path_home)+40];
-	char name[120];
+*/
+// static espeak_ng_STATUS ReadPhondataManifest(espeak_ng_ERROR_CONTEXT *context)
+// {
+// 	// Read the phondata-manifest file
+// 	FILE *f;
+// 	int n_lines = 0;
+// 	int ix;
+// 	char *p;
+// 	unsigned int value;
+// 	char buf[sizeof(path_home)+40];
+// 	char name[120];
 
-	sprintf(buf, "%s%c%s", path_home, PATHSEP, "phondata-manifest");
-	if ((f = fopen(buf, "r")) == NULL)
-		return create_file_error_context(context, errno, buf);
+// 	sprintf(buf, "%s%c%s", path_home, PATHSEP, "phondata-manifest");
+// 	if ((f = fopen(buf, "r")) == NULL)
+// 		return create_file_error_context(context, errno, buf);
 
-	while (fgets(buf, sizeof(buf), f) != NULL)
-		n_lines++;
+// 	while (fgets(buf, sizeof(buf), f) != NULL)
+// 		n_lines++;
 
-	rewind(f);
+// 	rewind(f);
 
-	if (manifest != NULL) {
-		for (ix = 0; ix < n_manifest; ix++)
-			free(manifest[ix].name);
-	}
+// 	if (manifest != NULL) {
+// 		for (ix = 0; ix < n_manifest; ix++)
+// 			free(manifest[ix].name);
+// 	}
 
-	if (n_lines == 0) {
-		fclose(f);
-		return ENS_EMPTY_PHONEME_MANIFEST;
-	}
+// 	if (n_lines == 0) {
+// 		fclose(f);
+// 		return ENS_EMPTY_PHONEME_MANIFEST;
+// 	}
 
-	NAMETAB *new_manifest = (NAMETAB *)realloc(manifest, n_lines * sizeof(NAMETAB));
-	if (new_manifest == NULL) {
-		fclose(f);
-		free(manifest);
-		return ENOMEM;
-	} else
-		manifest = new_manifest;
+// 	NAMETAB *new_manifest = (NAMETAB *)realloc(manifest, n_lines * sizeof(NAMETAB));
+// 	if (new_manifest == NULL) {
+// 		fclose(f);
+// 		free(manifest);
+// 		return ENOMEM;
+// 	} else
+// 		manifest = new_manifest;
 
-	n_manifest = 0;
-	while (fgets(buf, sizeof(buf), f) != NULL) {
-		if (!isalpha(buf[0]))
-			continue;
+// 	n_manifest = 0;
+// 	while (fgets(buf, sizeof(buf), f) != NULL) {
+// 		if (!isalpha(buf[0]))
+// 			continue;
 
-		if (sscanf(&buf[2], "%x %s", &value, name) == 2) {
-			if ((p = (char *)malloc(strlen(name)+1)) != NULL) {
-				strcpy(p, name);
-				manifest[n_manifest].value = value;
-				manifest[n_manifest].name = p;
-				n_manifest++;
-			}
-		}
-	}
-	fclose(f);
+// 		if (sscanf(&buf[2], "%x %s", &value, name) == 2) {
+// 			if ((p = (char *)malloc(strlen(name)+1)) != NULL) {
+// 				strcpy(p, name);
+// 				manifest[n_manifest].value = value;
+// 				manifest[n_manifest].name = p;
+// 				n_manifest++;
+// 			}
+// 		}
+// 	}
+// 	fclose(f);
 
-	return ENS_OK;
-}
-
+// 	return ENS_OK;
+// }
+/*
 static int n_phoneme_tabs;
 static int n_phcodes;
 
@@ -605,6 +606,7 @@ static unsigned int StringToWord(const char *string)
 	return word;
 }
 
+
 static MNEM_TAB reserved_phonemes[] = {
 	{ "_\001",  phonCONTROL },      // NOT USED
 	{ "%",      phonSTRESS_U },
@@ -642,6 +644,7 @@ static MNEM_TAB reserved_phonemes[] = {
 
 	{ NULL, 0 }
 };
+
 
 static void ReservePhCodes()
 {
@@ -1620,7 +1623,9 @@ static void CompileSound(int keyword, int isvowel)
    =4-7       p,t,n,n2   data=(bits5-7: phtype, place, property, special) (bits0-4: data)
    =8         data = stress bitmap
    =9         special tests
- */
+ */ 
+
+/*
 static int CompileIf(int elif)
 {
 	int key;
@@ -2504,7 +2509,7 @@ static void CompilePhonemeFiles()
 	memset(&phoneme_tab2[n_phcodes+1], 0, sizeof(phoneme_tab2[n_phcodes+1]));
 	phoneme_tab2[n_phcodes+1].mnemonic = 0; // terminator
 }
-
+*/
 #pragma GCC visibility push(default)
 
 espeak_ng_STATUS
@@ -2512,7 +2517,7 @@ espeak_ng_CompilePhonemeData(long rate,
                              FILE *log,
                              espeak_ng_ERROR_CONTEXT *context)
 {
-	return espeak_ng_CompilePhonemeDataPath(rate, NULL, NULL, log, context);
+	return 0;
 }
 
 espeak_ng_STATUS
@@ -2522,155 +2527,11 @@ espeak_ng_CompilePhonemeDataPath(long rate,
                                  FILE *log,
                                  espeak_ng_ERROR_CONTEXT *context)
 {
-	if (!log) log = stderr;
+	
 
-	char fname[sizeof(path_home)+40];
-	char phdst[sizeof(path_home)+40]; // Destination: path to the phondata/phontab/phonindex output files.
-
-	if (source_path) {
-		sprintf(phsrc, "%s", source_path);
-	} else {
-		sprintf(phsrc, "%s/../phsource", path_home);
-	}
-
-	if (destination_path) {
-		sprintf(phdst, "%s", destination_path);
-	} else {
-		sprintf(phdst, "%s", path_home);
-	}
-
-	samplerate_native = samplerate = rate;
-	LoadPhData(NULL, NULL);
-	if (LoadVoice("", 0) == NULL)
-		return ENS_VOICE_NOT_FOUND;
-
-	WavegenInit(rate, 0);
-	WavegenSetVoice(voice);
-
-	n_envelopes = 0;
-	error_count = 0;
-	resample_count = 0;
-	memset(markers_used, 0, sizeof(markers_used));
-
-	f_errors = log;
-
-	strncpy0(current_fname, "phonemes", sizeof(current_fname));
-
-	sprintf(fname, "%s/phonemes", phsrc);
-	fprintf(log, "Compiling phoneme data: %s\n", fname);
-	f_in = fopen(fname, "rb");
-	if (f_in == NULL)
-		return create_file_error_context(context, errno, fname);
-
-	sprintf(fname, "%s/%s", phsrc, "compile_report");
-	f_report = fopen(fname, "w");
-	if (f_report == NULL) {
-		int error = errno;
-		fclose(f_in);
-		return create_file_error_context(context, error, fname);
-	}
-
-	sprintf(fname, "%s/%s", phdst, "phondata-manifest");
-	if ((f_phcontents = fopen(fname, "w")) == NULL)
-		f_phcontents = stderr;
-
-	fprintf(f_phcontents,
-	        "# This file lists the type of data that has been compiled into the\n"
-	        "# phondata file\n"
-	        "#\n"
-	        "# The first character of a line indicates the type of data:\n"
-	        "#   S - A SPECT_SEQ structure\n"
-	        "#   W - A wavefile segment\n"
-	        "#   E - An envelope\n"
-	        "#\n"
-	        "# Address is the displacement within phondata of this item\n"
-	        "#\n"
-	        "#  Address  Data file\n"
-	        "#  -------  ---------\n");
-
-	sprintf(fname, "%s/%s", phdst, "phondata");
-	f_phdata = fopen(fname, "wb");
-	if (f_phdata == NULL) {
-		int error = errno;
-		fclose(f_in);
-		fclose(f_report);
-		fclose(f_phcontents);
-		return create_file_error_context(context, error, fname);
-	}
-
-	sprintf(fname, "%s/%s", phdst, "phonindex");
-	f_phindex = fopen(fname, "wb");
-	if (f_phindex == NULL) {
-		int error = errno;
-		fclose(f_in);
-		fclose(f_report);
-		fclose(f_phcontents);
-		fclose(f_phdata);
-		return create_file_error_context(context, error, fname);
-	}
-
-	sprintf(fname, "%s/%s", phdst, "phontab");
-	f_phtab = fopen(fname, "wb");
-	if (f_phtab == NULL) {
-		int error = errno;
-		fclose(f_in);
-		fclose(f_report);
-		fclose(f_phcontents);
-		fclose(f_phdata);
-		fclose(f_phindex);
-		return create_file_error_context(context, error, fname);
-	}
-
-	sprintf(fname, "%s/compile_prog_log", phsrc);
-	f_prog_log = fopen(fname, "wb");
-
-	// write a word so that further data doesn't start at displ=0
-	Write4Bytes(f_phdata, version_phdata);
-	Write4Bytes(f_phdata, samplerate_native);
-	Write4Bytes(f_phindex, version_phdata);
-
-	memset(ref_hash_tab, 0, sizeof(ref_hash_tab));
-
-	n_phoneme_tabs = 0;
-	stack_ix = 0;
-	StartPhonemeTable("base");
-	CompilePhonemeFiles();
-
-	EndPhonemeTable();
-	WritePhonemeTables();
-
-	fprintf(f_errors, "\nRefs %d,  Reused %d\n", count_references, duplicate_references);
-
-	fclose(f_in);
-	fclose(f_phcontents);
-	fclose(f_phdata);
-	fclose(f_phindex);
-	fclose(f_phtab);
-	if (f_prog_log != NULL)
-		fclose(f_prog_log);
-
-	LoadPhData(NULL, NULL);
-
-	CompileReport();
-
-	fclose(f_report);
-
-	if (resample_count > 0) {
-		fprintf(f_errors, "\n%d WAV files resampled to %d Hz\n", resample_count, samplerate_native);
-		fprintf(log, "Compiled phonemes: %d errors, %d files resampled to %d Hz.\n", error_count, resample_count, samplerate_native);
-	} else
-		fprintf(log, "Compiled phonemes: %d errors.\n", error_count);
-
-	if (f_errors != stderr && f_errors != stdout)
-		fclose(f_errors);
-
-	espeak_ng_STATUS status = ReadPhondataManifest(context);
-	if (status != ENS_OK)
-		return status;
-
-	return error_count > 0 ? ENS_COMPILE_ERROR : ENS_OK;
+	return 0;
 }
-
+/*
 #pragma GCC visibility pop
 
 static const char *preset_tune_names[] = {
@@ -2711,257 +2572,14 @@ static int LookupEnvelopeName(const char *name)
 {
 	return LookupMnem(envelope_names, name);
 }
-
+*/
 #pragma GCC visibility push(default)
 
 espeak_ng_STATUS espeak_ng_CompileIntonation(FILE *log, espeak_ng_ERROR_CONTEXT *context)
 {
-	if (!log) log = stderr;
-
-	int ix;
-	char *p;
-	char c;
-	int keyword;
-	int n_tune_names = 0;
-	bool done_split = false;
-	bool done_onset = false;
-	bool done_last = false;
-	int n_preset_tunes = 0;
-	int found = 0;
-	int tune_number = 0;
-	FILE *f_out;
-	TUNE *tune_data;
-	TUNE new_tune;
-
-	char name[12];
-	char tune_names[N_TUNE_NAMES][12];
-	char buf[sizeof(path_home)+150];
-
-	error_count = 0;
-	f_errors = log;
-
-	sprintf(buf, "%s/../phsource/intonation.txt", path_home);
-	if ((f_in = fopen(buf, "r")) == NULL) {
-		sprintf(buf, "%s/../phsource/intonation", path_home);
-		if ((f_in = fopen(buf, "r")) == NULL) {
-			int error = errno;
-			fclose(f_errors);
-			return create_file_error_context(context, error, buf);
-		}
-	}
-
-	for (ix = 0; preset_tune_names[ix] != NULL; ix++)
-		strcpy(tune_names[ix], preset_tune_names[ix]);
-	n_tune_names = ix;
-	n_preset_tunes = ix;
-
-	// make a list of the tune names
-	while (!feof(f_in)) {
-		if (fgets(buf, sizeof(buf), f_in) == NULL)
-			break;
-
-		if ((memcmp(buf, "tune", 4) == 0) && isspace(buf[4])) {
-			p = &buf[5];
-			while (isspace(*p)) p++;
-
-			ix = 0;
-			while ((ix < (int)(sizeof(name) - 1)) && !isspace(*p))
-				name[ix++] = *p++;
-			name[ix] = 0;
-
-			found = 0;
-			for (ix = 0; ix < n_tune_names; ix++) {
-				if (strcmp(name, tune_names[ix]) == 0) {
-					found = 1;
-					break;
-				}
-			}
-
-			if (found == 0) {
-				strncpy0(tune_names[n_tune_names++], name, sizeof(name));
-
-				if (n_tune_names >= N_TUNE_NAMES)
-					break;
-			}
-		}
-	}
-	rewind(f_in);
-	linenum = 1;
-
-	tune_data = (n_tune_names == 0) ? NULL : (TUNE *)calloc(n_tune_names, sizeof(TUNE));
-	if (tune_data == NULL) {
-		fclose(f_in);
-		fclose(f_errors);
-		return ENOMEM;
-	}
-
-	sprintf(buf, "%s/intonations", path_home);
-	f_out = fopen(buf, "wb");
-	if (f_out == NULL) {
-		int error = errno;
-		fclose(f_in);
-		fclose(f_errors);
-		free(tune_data);
-		return create_file_error_context(context, error, buf);
-	}
-
-	while (!feof(f_in)) {
-		keyword = NextItem(tINTONATION);
-
-		switch (keyword)
-		{
-		case kTUNE:
-			done_split = false;
-
-			memcpy(&new_tune, &default_tune, sizeof(TUNE));
-			NextItem(tSTRING);
-			strncpy0(new_tune.name, item_string, sizeof(new_tune.name));
-
-			found = 0;
-			tune_number = 0;
-			for (ix = 0; ix < n_tune_names; ix++) {
-				if (strcmp(new_tune.name, tune_names[ix]) == 0) {
-					found = 1;
-					tune_number = ix;
-
-					if (tune_data[ix].name[0] != 0)
-						found = 2;
-					break;
-				}
-			}
-			if (found == 2)
-				error("Duplicate tune name: '%s'", new_tune.name);
-			if (found == 0)
-				error("Bad tune name: '%s;", new_tune.name);
-			break;
-		case kENDTUNE:
-			if (!found) continue;
-			if (done_onset == false) {
-				new_tune.unstr_start[0] = new_tune.unstr_start[1];
-				new_tune.unstr_end[0] = new_tune.unstr_end[1];
-			}
-			if (done_last == false) {
-				new_tune.unstr_start[2] = new_tune.unstr_start[1];
-				new_tune.unstr_end[2] = new_tune.unstr_end[1];
-			}
-			memcpy(&tune_data[tune_number], &new_tune, sizeof(TUNE));
-			break;
-		case kTUNE_PREHEAD:
-			new_tune.prehead_start = NextItem(tNUMBER);
-			new_tune.prehead_end = NextItem(tNUMBER);
-			break;
-		case kTUNE_ONSET:
-			new_tune.onset = NextItem(tNUMBER);
-			new_tune.unstr_start[0] = NextItem(tSIGNEDNUMBER);
-			new_tune.unstr_end[0] = NextItem(tSIGNEDNUMBER);
-			done_onset = true;
-			break;
-		case kTUNE_HEADLAST:
-			new_tune.head_last = NextItem(tNUMBER);
-			new_tune.unstr_start[2] = NextItem(tSIGNEDNUMBER);
-			new_tune.unstr_end[2] = NextItem(tSIGNEDNUMBER);
-			done_last = true;
-			break;
-		case kTUNE_HEADENV:
-			NextItem(tSTRING);
-			if ((ix = LookupEnvelopeName(item_string)) < 0)
-				error("Bad envelope name: '%s'", item_string);
-			else
-				new_tune.stressed_env = ix;
-			new_tune.stressed_drop = NextItem(tNUMBER);
-			break;
-		case kTUNE_HEAD:
-			new_tune.head_max_steps = NextItem(tNUMBER);
-			new_tune.head_start = NextItem(tNUMBER);
-			new_tune.head_end = NextItem(tNUMBER);
-			new_tune.unstr_start[1] = NextItem(tSIGNEDNUMBER);
-			new_tune.unstr_end[1] = NextItem(tSIGNEDNUMBER);
-			break;
-		case kTUNE_HEADEXTEND:
-			// up to 8 numbers
-			for (ix = 0; ix < (int)(sizeof(new_tune.head_extend)); ix++) {
-				if (!isdigit(c = CheckNextChar()) && (c != '-'))
-					break;
-
-				new_tune.head_extend[ix] = (NextItem(tSIGNEDNUMBER) * 64) / 100; // convert from percentage to 64ths
-			}
-			new_tune.n_head_extend = ix; // number of values
-			break;
-		case kTUNE_NUCLEUS0:
-			NextItem(tSTRING);
-			if ((ix = LookupEnvelopeName(item_string)) < 0) {
-				error("Bad envelope name: '%s'", item_string);
-				break;
-			}
-			new_tune.nucleus0_env = ix;
-			new_tune.nucleus0_max = NextItem(tNUMBER);
-			new_tune.nucleus0_min = NextItem(tNUMBER);
-			break;
-		case kTUNE_NUCLEUS1:
-			NextItem(tSTRING);
-			if ((ix = LookupEnvelopeName(item_string)) < 0) {
-				error("Bad envelope name: '%s'", item_string);
-				break;
-			}
-			new_tune.nucleus1_env = ix;
-			new_tune.nucleus1_max = NextItem(tNUMBER);
-			new_tune.nucleus1_min = NextItem(tNUMBER);
-			new_tune.tail_start = NextItem(tNUMBER);
-			new_tune.tail_end = NextItem(tNUMBER);
-
-			if (!done_split) {
-				// also this as the default setting for 'split'
-				new_tune.split_nucleus_env = ix;
-				new_tune.split_nucleus_max = new_tune.nucleus1_max;
-				new_tune.split_nucleus_min = new_tune.nucleus1_min;
-				new_tune.split_tail_start = new_tune.tail_start;
-				new_tune.split_tail_end = new_tune.tail_end;
-			}
-			break;
-		case kTUNE_SPLIT:
-			NextItem(tSTRING);
-			if ((ix = LookupEnvelopeName(item_string)) < 0) {
-				error("Bad envelope name: '%s'", item_string);
-				break;
-			}
-			done_split = true;
-			new_tune.split_nucleus_env = ix;
-			new_tune.split_nucleus_max = NextItem(tNUMBER);
-			new_tune.split_nucleus_min = NextItem(tNUMBER);
-			new_tune.split_tail_start = NextItem(tNUMBER);
-			new_tune.split_tail_end = NextItem(tNUMBER);
-			NextItem(tSTRING);
-			item_string[12] = 0;
-			for (ix = 0; ix < n_tune_names; ix++) {
-				if (strcmp(item_string, tune_names[ix]) == 0)
-					break;
-			}
-
-			if (ix == n_tune_names)
-				error("Tune '%s' not found", item_string);
-			else
-				new_tune.split_tune = ix;
-			break;
-		default:
-			error("Unexpected: '%s'", item_string);
-			break;
-		}
-	}
-
-	for (ix = 0; ix < n_preset_tunes; ix++) {
-		if (tune_data[ix].name[0] == 0)
-			error("Tune '%s' not defined", preset_tune_names[ix]);
-	}
-	fwrite(tune_data, n_tune_names, sizeof(TUNE), f_out);
-	free(tune_data);
-	fclose(f_in);
-	fclose(f_out);
-
-	fprintf(log, "Compiled %d intonation tunes: %d errors.\n", n_tune_names, error_count);
-
-	LoadPhData(NULL, NULL);
-
-	return error_count > 0 ? ENS_COMPILE_ERROR : ENS_OK;
+	return 0;
 }
+
+
 
 #pragma GCC visibility pop
