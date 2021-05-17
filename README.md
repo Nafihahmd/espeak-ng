@@ -5,6 +5,7 @@
 - [Documentation](#documentation)
 - [Cross Compiling](#cross-compile)
 - [Removing languages](docs/rm-languages.md)
+- [Removing languages](docs/rm-compiledata.md)
 - [eSpeak Compatibility](#espeak-compatibility)
 - [History](#history)
 - [License Information](#license-information)
