@@ -2,7 +2,7 @@
 Espeak-ng supports 100+ languages. But incase you are not a multilingual and is very reserved about the space utilized by espeak-ng it would be worthwhile to remove unwanted language support completely.
 
 ## Objectives
-Language contaons two parts. Language data and language script. So the objectives are:
+Language contains two parts. Language data and language script. So the objectives are:
 - Remove Language data 
 - Remove script support
   
