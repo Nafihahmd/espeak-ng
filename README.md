@@ -82,11 +82,17 @@ cd espeak-ng
 ```
 ./autogen.sh
 ```
+4. Before compiling for target architecture you should first build for the system you are working on
+```
+./configure --prefix=/usr
+make 
+```
+
 4. Run configure with *CC Flag* pointing to our newly installed tool chain and build (make) the application
 ```
 CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
 
-make -B
+make -B src/espeak-ng src/speak-ng
 ```
 	You sholud consider disabling unnecessary features during configure stage.
 	eg.,
