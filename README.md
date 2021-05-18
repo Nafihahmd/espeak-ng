@@ -93,8 +93,8 @@ CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc CXX=/opt/cross-pi-gcc/bin/arm-l
 
 make -B src/espeak-ng src/speak-ng
 ```
-	You sholud consider disabling unnecessary features during configure stage.
-	eg.,
+You sholud consider disabling unnecessary features during configure stage.
+eg.,
  ```
  CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc CXX=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-c++ ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr --without-klatt --with-speechplayer=no --with-mbrola=no --with-sonic=no --with-async=no
  ```
