@@ -78,26 +78,25 @@ git clone https://github.com/Nafihahmd/espeak-ng.git
 ```
 cd espeak-ng
 ```
-3. Run Autogen script
+3. Before compiling for target architecture you should first build for the system you are working on
 ```
 ./autogen.sh
-```
-4. Before compiling for target architecture you should first build for the system you are working on
-```
+
 ./configure --prefix=/usr
+
 make 
 ```
 
 4. Run configure with *CC Flag* pointing to our newly installed tool chain and build (make) the application
 ```
-CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
+CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc CXX=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-c++ ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
 
 make -B src/espeak-ng src/speak-ng
 ```
 	You sholud consider disabling unnecessary features during configure stage.
 	eg.,
  ```
- CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc ./configure --prefix=/usr --without-klatt --with-speechplayer=no --with-mbrola=no --with-sonic=no --with-async=no --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr
+ CC=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-gcc CXX=/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-c++ ./configure --build x86_64-pc-linux-gnu --host arm-linux-gnueabihf --prefix=/usr --without-klatt --with-speechplayer=no --with-mbrola=no --with-sonic=no --with-async=no
  ```
 
 5. Copy files to your host device  
